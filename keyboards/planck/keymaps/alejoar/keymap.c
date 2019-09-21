@@ -38,7 +38,12 @@ enum planck_keycodes {
   EXT_PLV,
   // Macros
   Q_MARK,
-  ACCENT
+  ACCENT,
+  EOL1,
+  EOL2,
+  BOL1,
+  BOL2,
+  NYEH
 };
 
 #define LOWER MO(_LOWER)
@@ -115,7 +120,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_TILD, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC, KC_CIRC, KC_AMPR,    KC_ASTR,    KC_LPRN, KC_RPRN, KC_BSPC,
     KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_UNDS,    KC_PLUS,    KC_LCBR, KC_RCBR, KC_PIPE,
     _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  S(KC_NUHS), S(KC_NUBS), KC_HOME, KC_END,  _______,
-    ACCENT,  _______, _______, _______, _______, _______, _______, _______,    Q_MARK,     KC_VOLD, KC_VOLU, KC_MPLY
+    ACCENT,  NYEH,    _______, _______, _______, _______, _______, _______,    Q_MARK,     BOL1,    KC_VOLU, EOL1
 ),
 
 /* Raise
@@ -133,7 +138,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_GRV,  KC_1,    KC_2,    KC_3,    KC_4,    KC_5,    KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    KC_BSPC,
     KC_DEL,  KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_F6,   KC_MINS, KC_EQL,  KC_LBRC, KC_RBRC, KC_BSLS,
     _______, KC_F7,   KC_F8,   KC_F9,   KC_F10,  KC_F11,  KC_F12,  KC_NUHS, KC_NUBS, KC_PGUP, KC_PGDN, _______,
-    ACCENT,  _______, _______, _______, _______, _______, _______, _______, Q_MARK,  KC_VOLD, KC_VOLU, KC_MPLY
+    ACCENT,  NYEH,    _______, _______, _______, _______, _______, _______, Q_MARK,  BOL2,    KC_VOLU, EOL2
 ),
 
 /* Plover layer (http://opensteno.org)
@@ -258,6 +263,21 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
                 return false;
             case ACCENT:
                 SEND_STRING("`");
+                return false;
+            case NYEH:
+                SEND_STRING("ñ");
+                return false;
+            case EOL1:
+                SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_RIGHT) SS_UP(X_LGUI));
+                return false;
+            case BOL1:
+                SEND_STRING(SS_DOWN(X_LGUI) SS_TAP(X_LEFT) SS_UP(X_LGUI));
+                return false;
+            case EOL2:
+                SEND_STRING(SS_DOWN(X_LCTRL) SS_TAP(X_E) SS_UP(X_LCTRL));
+                return false;
+            case BOL2:
+                SEND_STRING(SS_DOWN(X_LCTRL) SS_TAP(X_A) SS_UP(X_LCTRL));
                 return false;
         }
   }
