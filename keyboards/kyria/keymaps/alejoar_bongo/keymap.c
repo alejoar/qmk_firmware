@@ -272,14 +272,15 @@ static void render_anim(void) {
 
     //assumes 1 frame prep stage
     void animation_phase(void) {
-        if(get_current_wpm() <=IDLE_SPEED){
+        // if(get_current_wpm() <=IDLE_SPEED){
+        if(get_current_wpm() <TAP_SPEED){
             current_idle_frame = (current_idle_frame + 1) % IDLE_FRAMES;
             oled_write_raw_P(idle[abs((IDLE_FRAMES-1)-current_idle_frame)], ANIM_SIZE);
          }
-         if(get_current_wpm() >IDLE_SPEED && get_current_wpm() <TAP_SPEED){
-             // oled_write_raw_P(prep[abs((PREP_FRAMES-1)-current_prep_frame)], ANIM_SIZE); // uncomment if IDLE_FRAMES >1
-            //  oled_write_raw_P(prep[0], ANIM_SIZE);  // remove if IDLE_FRAMES >1
-         }
+        //  if(get_current_wpm() >IDLE_SPEED && get_current_wpm() <TAP_SPEED){
+        //      oled_write_raw_P(prep[abs((PREP_FRAMES-1)-current_prep_frame)], ANIM_SIZE); // uncomment if IDLE_FRAMES >1
+        //      oled_write_raw_P(prep[0], ANIM_SIZE);  // remove if IDLE_FRAMES >1
+        //  }
          if(get_current_wpm() >=TAP_SPEED){
              current_tap_frame = (current_tap_frame + 1) % TAP_FRAMES;
              oled_write_raw_P(tap[abs((TAP_FRAMES-1)-current_tap_frame)], ANIM_SIZE);
