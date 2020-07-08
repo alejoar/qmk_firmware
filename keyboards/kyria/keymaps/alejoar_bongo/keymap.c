@@ -68,10 +68,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  *                        `----------------------------------'  `----------------------------------'
  */
     [_LOWER] = LAYOUT(
-      _______, KC_EXLM, KC_AT,   KC_LCBR, KC_RCBR, KC_PIPE,                                     _______, _______, _______, _______, _______, KC_BSLS,
-      _______, KC_HASH, KC_DLR,  KC_LPRN, KC_RPRN, KC_GRV,                                      KC_PLUS, KC_MINS, KC_SLSH, KC_ASTR, KC_PERC, KC_QUOT,
-      _______, KC_PERC, KC_CIRC, KC_LBRC, KC_RBRC, KC_TILD, _______, _______, _______, _______, KC_AMPR, KC_EQL,  KC_COMM, KC_DOT,  KC_SLSH, KC_MINS,
-                                 TOGGLE_RGB, _______, _______, KC_SCLN, KC_EQL,  KC_EQL,  KC_SCLN, _______, _______, _______
+      KC_PIPE, KC_EXLM, KC_AT,   KC_HASH, KC_DLR,  KC_PERC,                                     KC_AMPR, _______, KC_ASTR, KC_LPRN, KC_RPRN, KC_BSLS,
+      KC_F1,   KC_F2,   KC_F3,   KC_F4,   KC_F5,   KC_GRV,                                      KC_PLUS, KC_EQL,  _______,  KC_LCBR, KC_RCBR, _______,
+      _______, _______, _______, _______, KC_CIRC, KC_TILD, _______, _______, _______, _______, _______, _______, KC_COMM, KC_LBRC, KC_RBRC, KC_MINS,
+                                 TOGGLE_RGB, _______, _______, _______, KC_EQL,  KC_EQL,  _______, _______, _______, _______
     ),
 /*
  * Raise Layer: Number keys, media, navigation
@@ -90,7 +90,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_RAISE] = LAYOUT(
       _______, KC_1, 	  KC_2,    KC_3,    KC_4,    KC_5,                                        KC_6,    KC_7,    KC_8,    KC_9,    KC_0,    _______,
       _______, _______, KC_MPRV, KC_MPLY, KC_MNXT, KC_VOLU,                                     KC_LEFT, KC_DOWN, KC_UP,   KC_RGHT, _______, _______,
-      _______, _______, _______, _______, KC_BTN1, KC_BTN2, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, _______, _______,
+      _______, _______, _______, _______, KC_BTN1, KC_BTN2, _______, _______, _______, _______, KC_MS_L, KC_MS_D, KC_MS_U, KC_LBRC, KC_RBRC, _______,
                                  KC_MPLY, _______, _______, _______, _______, _______, _______, _______, _______, _______
     ),
 /*
@@ -164,19 +164,19 @@ static void render_status(void) {
     // oled_write_P(PSTR("Layer: "), false);
     switch (get_highest_layer(layer_state)) {
         case _QWERTY:
-            oled_write_P(PSTR("QWERTY\n"), false);
+            oled_write_P(PSTR("QWERTY"), false);
             break;
         case _LOWER:
-            oled_write_P(PSTR("Symbols\n"), false);
+            oled_write_P(PSTR("Symbols"), false);
             break;
         case _RAISE:
-            oled_write_P(PSTR("Num, media, nav\n"), false);
+            oled_write_P(PSTR("Num, nav"), false);
             break;
         case _ADJUST:
-            oled_write_P(PSTR("Fn, RGB\n"), false);
+            oled_write_P(PSTR("Fn keys"), false);
             break;
         default:
-            oled_write_P(PSTR("Undefined\n"), false);
+            oled_write_P(PSTR("Undefined"), false);
     }
 
     // Host Keyboard LED Status
@@ -379,15 +379,14 @@ static void render_oled_image(void) { // Helen Tseong (http://shewolfe.co/), the
 void oled_task_user(void) {
     if (is_keyboard_master()) {
         render_anim();
-        oled_set_cursor(0, 6);
+        oled_set_cursor(0, oled_max_lines()-1);
         render_status();
+        oled_set_cursor(oled_max_chars()-7, oled_max_lines()-1);
+        sprintf(wpm_str, "%03d WPM", get_current_wpm());
+        oled_write(wpm_str, false);
     } else {
         oled_set_cursor(0, 0);
         render_oled_image();
-        oled_set_cursor(oled_max_chars()-9, oled_max_lines()-1);
-        // oled_set_cursor(0,3);
-        sprintf(wpm_str, "WPM: %03d", get_current_wpm());
-        oled_write(wpm_str, false);
     }
 }
 #endif
