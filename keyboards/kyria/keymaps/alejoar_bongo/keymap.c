@@ -24,7 +24,7 @@ char wpm_str[10];
 
 enum layers { _QWERTY = 0, _LOWER, _RAISE, _ADJUST, _GAMING };
 
-enum custom_keycodes { TOGGLE_RGB = SAFE_RANGE, QUICK_SSHOT, SSHOT, TOGGLE_OLED, TOGGLE_BONGO, EMOJI };
+enum custom_keycodes { TOGGLE_RGB = SAFE_RANGE, QUICK_SSHOT, SSHOT, TOGGLE_OLED, TOGGLE_BONGO, EMOJI, ES_EN };
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     /*
@@ -44,7 +44,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_QWERTY] = LAYOUT(
                       KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                             KC_Y, KC_U, KC_I, KC_O, KC_P, KC_MINS,
         MT(MOD_LCTL, KC_ESC), KC_A, KC_S, KC_D, KC_F, KC_G,                             KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
-        KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B, SSHOT, QUICK_SSHOT,        EMOJI, EMOJI, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_MINS,
+        KC_LSFT, KC_Z, KC_X, KC_C, KC_V, KC_B, SSHOT, QUICK_SSHOT,        EMOJI, ES_EN, KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_MINS,
         KC_MUTE, MT(MOD_LALT, KC_DEL), MO(_LOWER), KC_LGUI, KC_SPC,     LT(_RAISE, KC_ENT), LT(_RAISE, KC_ENT), MO(_RAISE), KC_BSPC, KC_RALT),
     /*
      * Lower Layer: Symbols
@@ -154,6 +154,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         case EMOJI:
             if (record->event.pressed) {
                 register_code16(LGUI(LCTL(KC_SPC)));
+            } else {
+                clear_mods();
+            }
+            return false;
+        case ES_EN:
+            if (record->event.pressed) {
+                register_code16(LALT(LCTL(KC_SPC)));
             } else {
                 clear_mods();
             }
